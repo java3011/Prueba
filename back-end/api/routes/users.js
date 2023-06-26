@@ -31,7 +31,7 @@ router.post('/signin', (req,res)=>{
         }
     })
 })
-
+//Esto se debe realizar una vez obtenido el token
 router.post('/test',verifyToken,(req,res)=>{
     console.log(req.dato);
     res.json('Bad info');
