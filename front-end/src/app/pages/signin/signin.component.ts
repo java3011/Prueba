@@ -1,0 +1,38 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { SigninService } from 'src/app/services/signin.service'; 
+
+@Component({
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.css']
+})
+export class SigninComponent implements OnInit {
+
+  signinForm = FormGroup;
+  
+  constructor(public http:SigninService,private route:Router) {}
+
+  ngOnInit(): void { 
+     this.signinForm = new FormGroup({
+      userName: new FormControl("",[Validators.required, Validators.maxLength(80)]),
+      Email: new FormControl("",[Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"), Validators.maxLength(80)]),
+      userPassword: new FormControl("" ,[Validators.required, Validators.minLength(6), Validators.maxLength(20)]),
+      Charge: new FormControl("",[Validators.maxLength(50)])
+    });
+  }
+  
+  get f(){
+    return this.signinForm.controls;
+  }
+
+  submit(){
+    console.log(this.signinForm.value);
+    this.http.create(this.signinForm.value).subscribe(res =>{
+      console.log('User created successfully',res.email);
+      this.route.navigateByUrl('/');
+    })
+  }
+}
